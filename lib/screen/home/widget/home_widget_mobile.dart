@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web/screen/home/widgetMenu/widget_home_mobile.dart';
+import 'package:flutter_web/screen/home/widgetMenu/widget_home_web.dart';
 import 'package:flutter_web/screen/menu/view/menu_view.dart';
 
 class HomeWidgetMobile extends StatefulWidget {
@@ -11,6 +11,7 @@ class HomeWidgetMobile extends StatefulWidget {
 
 class _HomeWidgetMobileState extends State<HomeWidgetMobile> {
   int index = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,21 +19,18 @@ class _HomeWidgetMobileState extends State<HomeWidgetMobile> {
         backgroundColor: Colors.white,
       ),
       appBar: AppBar(),
-      body: Scrollbar(
-        thumbVisibility: true,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              MenuView(
-                onItemSelected: (index1) {
-                  setState(() {
-                    index = index1;
-                  });
-                },
-              ),
-              index == 0 ? WidgetHomeMobile() : SizedBox(),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            MenuView(
+              onItemSelected: (index1) {
+                setState(() {
+                  index = index1;
+                });
+              },
+            ),
+            index == 0 ? WidgetHomeWeb() : SizedBox(),
+          ],
         ),
       ),
     );

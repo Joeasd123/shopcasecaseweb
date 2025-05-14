@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web/screen/home/widget/home_widget_mobile.dart';
 import 'package:flutter_web/screen/home/widget/home_widget_web.dart';
@@ -7,12 +8,13 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return constraints.maxWidth < 600
-            ? HomeWidgetMobile()
-            : HomeWidgetWeb();
-      },
-    );
+    if (kIsWeb) {
+      return HomeWidgetWeb();
+    } else if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      return HomeWidgetMobile();
+    } else {
+      return Center(child: Text('ไม่รองรับแพลตฟอร์มนี้'));
+    }
   }
 }

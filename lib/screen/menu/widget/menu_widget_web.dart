@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_web/screen/login/widgets/loginbody.dart';
 
 class MenuWidgetWeb extends StatefulWidget {
   const MenuWidgetWeb({super.key, this.onItemSelected});
@@ -55,65 +54,7 @@ class _MenuWidgetWebState extends State<MenuWidgetWeb> {
                   );
                 }).toList(),
               ),
-              Row(
-                children: [
-                  Text(
-                    "Suthep",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Gap(10.w),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("เข้าสู่ระบบ"),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Username"),
-                                  Gap(5.h),
-                                  TextFormField(),
-                                  Gap(5.h),
-                                  Text("Password"),
-                                  Gap(5.h),
-                                  TextFormField(),
-                                  Gap(20.h),
-                                  Center(
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.green,
-                                      ),
-                                      child: Text(
-                                        "ตกลง",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          });
-                    },
-                    label: Text(
-                      "เข้าสู่ระบบ",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    icon:
-                        Icon(Icons.screen_share_outlined, color: Colors.white),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                  ),
-                ],
-              )
+              Loginbody()
             ],
           ),
         ),
