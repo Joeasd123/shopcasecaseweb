@@ -19,13 +19,7 @@ class _LoginbodyState extends ConsumerState<Loginbody> {
   Widget build(BuildContext context) {
     final userToken = ref.watch(userTokenProvifer);
     final token = userToken?['token'];
-    final id = userToken?['id'];
-    final getUser = (id != null)
-        ? ref.watch(getUserProvider(int.parse(id)))
-        : const AsyncValue.loading();
-
-    print("ผลลัพธ์จาก ID: $id");
-    print("ผลลัพธ์จาก Token: $token");
+    final getUser = ref.watch(getUserProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -33,23 +27,25 @@ class _LoginbodyState extends ConsumerState<Loginbody> {
           Row(
             children: [
               if (token != null)
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/user.png"),
-                    ),
-                    Gap(10.w),
-                    getUser.when(
-                      data: (user) => Text(
-                        user.name ?? "",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      loading: () => const CircularProgressIndicator(),
-                      error: (err, stack) =>
-                          const Text("โหลดชื่อผู้ใช้ล้มเหลว"),
-                    ),
-                    Gap(10.w),
-                  ],
+                getUser.when(
+                  data: (user) {
+                    return Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(user.first.imageprofile ?? ""),
+                        ),
+                        Gap(10.w),
+                        Text(
+                          '${user.first.firstname ?? ""} ${user.first.lastname ?? ""}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        Gap(10.w),
+                      ],
+                    );
+                  },
+                  loading: () => const CircularProgressIndicator(),
+                  error: (err, stack) => const Text("โหลดชื่อผู้ใช้ล้มเหลว"),
                 ),
               if (userToken == null)
                 ElevatedButton.icon(

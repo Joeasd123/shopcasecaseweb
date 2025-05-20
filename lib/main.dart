@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/home/view/home_view.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,12 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   final container = ProviderContainer();
   await container.read(userTokenProvifer.notifier).loadToken();
+
+  await Supabase.initialize(
+    url: 'https://fzwtynggwmnodhdrwvwy.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6d3R5bmdnd21ub2RoZHJ3dnd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1NDQ5NjQsImV4cCI6MjA2MzEyMDk2NH0.Dxg8VB-IFjHINtirJiG8tdUjdpcmnA_pXUh9j85CH68',
+  );
   runApp(
     UncontrolledProviderScope(
       container: container,

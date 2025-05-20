@@ -4,28 +4,28 @@ class UserModel extends Equatable {
   const UserModel({
     this.id,
     this.email,
-    this.password,
-    this.name,
-    this.role,
-    this.enabled,
+    this.username,
+    this.firstname,
+    this.lastname,
     this.address,
+    this.imageprofile,
   });
-  final int? id;
+  final String? id;
   final String? email;
-  final String? password;
-  final String? name;
-  final String? role;
-  final bool? enabled;
+  final String? username;
+  final String? firstname;
+  final String? lastname;
+  final String? imageprofile;
   final String? address;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json["id"],
       email: json["email"],
-      password: json["password"],
-      name: json["name"],
-      role: json["role"],
-      enabled: json["enabled"],
+      username: json["username"],
+      firstname: json["firstname"],
+      lastname: json["lastname"],
+      imageprofile: json["imageprofile"],
       address: json["address"],
     );
   }
@@ -33,19 +33,19 @@ class UserModel extends Equatable {
   Map<String, dynamic> toJson() => {
         "id": id,
         "email": email,
-        "password": password,
-        "name": name,
-        "role": role,
-        "enabled": enabled,
+        "username": username,
+        "firstname": firstname,
+        "lastname": lastname,
+        "imageprofile": imageprofile,
         "address": address,
       };
 
   @override
   String toString() {
-    return "$id, $email,$password,$name,$role,$enabled,$address ";
+    return "$id, $email,$username,$firstname,$lastname,$imageprofile,$address ";
   }
 
   @override
   List<Object?> get props =>
-      [id, email, password, name, role, enabled, address];
+      [id, email, username, firstname, lastname, imageprofile, address];
 }

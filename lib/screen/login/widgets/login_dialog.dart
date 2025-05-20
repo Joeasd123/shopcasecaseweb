@@ -84,29 +84,30 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                       print(
                           "พยายามเข้าสู่ระบบด้วย email: $email, password: $password");
 
-                      try {
-                        final data = await authRepository.login(
-                          email: email,
-                          password: password,
-                        );
-                        print("ผลลัพธ์จาก API: $data");
+                      // try {
+                      final data = await authRepository.login(
+                        email: email,
+                        password: password,
+                      );
+                      print("ผลลัพธ์จาก API: $data");
 
-                        ref.read(userProvifer.notifier).state = data["payload"];
-                        await ref.read(userTokenProvifer.notifier).storeToken(
-                              data["token"],
-                              data["payload"]["id"].toString(),
-                            );
+                      // ref.read(userProvifer.notifier).state = data["payload"];
+                      await ref.read(userTokenProvifer.notifier).storeToken(
+                            data["access_token"],
+                            data["user"]["id"].toString(),
+                          );
 
-                        ref.invalidate(getUserProvider);
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                      } catch (e) {
-                        print("เกิดข้อผิดพลาด: $e");
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("เข้าสู่ระบบล้มเหลว")),
-                        );
-                      }
+                      ref.invalidate(getUserProvider);
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
+                      // } catch (e) {
+
+                      //   print("เกิดข้อผิดพลาด: $e");
+                      //   if (!context.mounted) return;
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("เข้าสู่ระบบล้มเหลว")),
+                      //   );
+                      // }
                     }
                   },
                   style: ElevatedButton.styleFrom(
