@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/login/widgets/login_dialog.dart';
 import 'package:flutter_web/screen/login/widgets/register_dialog.dart';
+import 'package:flutter_web/screen/profile/view/profile_view.dart';
 import 'package:flutter_web/screen/user/controllers/user_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,9 +32,16 @@ class _LoginbodyState extends ConsumerState<Loginbody> {
                   data: (user) {
                     return Row(
                       children: [
-                        CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(user.first.imageprofile ?? ""),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => ProfileView());
+                          },
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(user.first.imageprofile ?? ""),
+                          ),
                         ),
                         Gap(10.w),
                         Text(
