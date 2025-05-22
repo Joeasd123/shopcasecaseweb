@@ -11,7 +11,6 @@ import 'package:flutter_web/screen/user/controllers/user_controller.dart';
 import 'package:flutter_web/screen/user/repository/user_repository.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileWidget extends StatefulHookConsumerWidget {
   const ProfileWidget({super.key});
@@ -62,22 +61,19 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> {
                               backgroundImage: NetworkImage(
                                   data.first.imageprofile.toString()),
                             ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (kIsWeb) {
-                            await pickImageWeb(ref);
-                          } else {
-                            final picker = ImagePicker();
-                            final pickedFile = await picker.pickImage(
-                                source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              ref.read(uploadFileProfileMobile.notifier).state =
-                                  pickedFile;
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: IconButton(
+                          icon: Icon(Icons.camera_alt_outlined),
+                          onPressed: () {
+                            if (kIsWeb) {
+                              print("📸 กำลังเปิด File Picker บน Web...");
+                              pickImageWeb(ref);
                             }
-                          }
-                        },
-                        child: Icon(Icons.camera_alt_outlined),
-                      )
+                          },
+                        ),
+                      ),
                     ]),
                   ),
                   Gap(10.h),

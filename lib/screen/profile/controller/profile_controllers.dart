@@ -57,12 +57,14 @@ Future<dynamic> openDialogImage(
 }
 
 Future<void> pickImageWeb(WidgetRef ref) async {
+  print("✅ pickImageWeb ถูกเรียกแล้ว");
   final uploadrepository = ref.watch(uploadRemoteRepositoryProvider);
   final userToken = ref.watch(userTokenProvifer);
   final result = await FilePicker.platform.pickFiles(
     type: FileType.image,
     withData: true,
   );
+  print("📂 result: ${result?.files.single.name}");
 
   if (result != null && result.files.single.bytes != null) {
     final Uint8List imageBytes = result.files.single.bytes!;
@@ -75,5 +77,8 @@ Future<void> pickImageWeb(WidgetRef ref) async {
         token: userToken?['token']);
     ref.read(uploadFileKey.notifier).state = imagefilekey;
     ref.read(uploadFileProfile.notifier).state = result.files.single;
+    print("✅ อัปโหลดสำเร็จ: $imagefilekey");
+  } else {
+    print("❌ ไม่ได้เลือกไฟล์ หรือเลือกไฟล์ไม่สำเร็จ");
   }
 }
