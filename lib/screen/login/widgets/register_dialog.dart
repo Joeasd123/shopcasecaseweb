@@ -1,13 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_web/screen/core/widget/showdialog_widget.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/login/service/login_repository.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RegisterDialog extends StatefulHookConsumerWidget {
-  const RegisterDialog({super.key});
+  const RegisterDialog({
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _RegisterDialogState();
@@ -45,7 +46,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                 ),
               ),
               Gap(15),
-              Text("Username"),
+              Text("email"),
               Gap(5),
               TextFormField(
                 focusNode: emailFocusNode,
@@ -77,17 +78,62 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      final data = await authRepository.login(
-                        email: controllersLogin["email"]?.text ?? '',
-                        password: controllersLogin["password"]?.text ?? '',
+                      final email = controllersregister["email"]?.text ?? '';
+                      final password =
+                          controllersregister["password"]?.text ?? '';
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       );
-                      log(data.toString());
+
+                      try {
+                        final data = await authRepository.register(
+                          email: email,
+                          password: password,
+                        );
+
+                        debugPrint("Register Success: $data");
+
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+
+                        if (data != null) {
+                          Navigator.pop(context);
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => ShowdialogWidget(),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('เกิดข้อผิดพลาด'),
+                              content: Text(e.toString()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('ตกลง'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
-                  child: Text(
+                  child: const Text(
                     "ตกลง",
                     style: TextStyle(color: Colors.white),
                   ),

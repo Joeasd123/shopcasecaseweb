@@ -45,7 +45,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                 ),
               ),
               Gap(15),
-              Text("Username"),
+              Text("email"),
               Gap(5),
               TextFormField(
                 focusNode: emailFocusNode,
@@ -82,30 +82,42 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                       print(
                           "พยายามเข้าสู่ระบบด้วย email: $email, password: $password");
 
-                      // try {
-                      final data = await authRepository.login(
-                        email: email,
-                        password: password,
-                      );
-                      print("ผลลัพธ์จาก API: $data");
+                      try {
+                        final data = await authRepository.login(
+                          email: email,
+                          password: password,
+                        );
+                        print("ผลลัพธ์จาก API: $data");
 
-                      // ref.read(userProvifer.notifier).state = data["payload"];
-                      await ref.read(userTokenProvifer.notifier).storeToken(
-                            data["access_token"],
-                            data["user"]["id"].toString(),
-                          );
+                        await ref.read(userTokenProvifer.notifier).storeToken(
+                              data["access_token"],
+                              data["user"]["id"].toString(),
+                            );
 
-                      ref.invalidate(getUserProvider);
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                      // } catch (e) {
+                        ref.invalidate(getUserProvider);
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                      } catch (e) {
+                        String errorMessage = "เข้าสู่ระบบล้มเหลว";
+                        if (e is Exception) {
+                          errorMessage =
+                              e.toString().replaceFirst('Exception: ', '');
+                        }
 
-                      //   print("เกิดข้อผิดพลาด: $e");
-                      //   if (!context.mounted) return;
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(content: Text("เข้าสู่ระบบล้มเหลว")),
-                      //   );
-                      // }
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("เกิดข้อผิดพลาด"),
+                            content: Text(errorMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("ตกลง"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
