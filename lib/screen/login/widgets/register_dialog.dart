@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/login/service/login_repository.dart';
 import 'package:gap/gap.dart';
@@ -32,7 +31,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
 
     return Dialog(
       child: Padding(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(20),
         child: Form(
           key: formKey,
           child: Column(
@@ -42,13 +41,12 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
               Center(
                 child: Text(
                   "สมัครสมาชิก",
-                  style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              Gap(15.h),
+              Gap(15),
               Text("Username"),
-              Gap(5.h),
+              Gap(5),
               TextFormField(
                 focusNode: emailFocusNode,
                 controller: controllersregister["email"],
@@ -59,9 +57,9 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                   emailFocusNode.requestFocus();
                 },
               ),
-              Gap(10.h),
+              Gap(10),
               Text("Password"),
-              Gap(5.h),
+              Gap(5),
               TextFormField(
                 focusNode: passwordFocusNode,
                 controller: controllersregister["password"],
@@ -73,7 +71,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                   passwordFocusNode.requestFocus();
                 },
               ),
-              Gap(20.h),
+              Gap(20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -95,7 +93,7 @@ class _RegisterDialogState extends ConsumerState<RegisterDialog> {
                   ),
                 ),
               ),
-              Gap(20.h),
+              Gap(20),
               Center(
                 child: TextButton(
                   onPressed: () {

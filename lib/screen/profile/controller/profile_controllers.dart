@@ -1,14 +1,10 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_web/screen/login/controller/login_controller.dart';
-import 'package:flutter_web/screen/uploadfile/repository/upload_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
 Map<String, TextEditingController> controllersProfile = {
   "firstname": TextEditingController(),
@@ -19,6 +15,10 @@ final uploadFileProfile = StateProvider.autoDispose<Uint8List?>((ref) {
   return null;
 });
 
+final uploadFile = StateProvider.autoDispose<PlatformFile?>((ref) {
+  return null;
+});
+
 final uploadFileKey = StateProvider.autoDispose<String?>((ref) {
   return null;
 });
@@ -26,6 +26,7 @@ final uploadFileKey = StateProvider.autoDispose<String?>((ref) {
 final uploadFileProfileMobile = StateProvider.autoDispose<XFile?>((ref) {
   return null;
 });
+
 Future<dynamic> openDialogImage(
     {BuildContext? context, void Function()? ontap}) async {
   await showModalBottomSheet(
@@ -37,7 +38,7 @@ Future<dynamic> openDialogImage(
           child: Text(
             "แกลเลอรี่",
             style: TextStyle(
-              fontSize: 14.0.sp,
+              fontSize: 14.0,
             ),
           ),
         ),
@@ -49,7 +50,7 @@ Future<dynamic> openDialogImage(
         child: Text(
           "cancel",
           style: TextStyle(
-            fontSize: 14.0.sp,
+            fontSize: 14.0,
           ),
         ),
       ),
@@ -57,28 +58,33 @@ Future<dynamic> openDialogImage(
   );
 }
 
-Future<void> pickImageWeb(WidgetRef ref) async {
-  try {
-    final mediaData = await ImagePickerWeb.getImageAsBytes();
-    if (mediaData != null) {
-      final imagefilekey = await ref
-          .read(uploadRemoteRepositoryProvider)
-          .uploadImageToSupabase(
-            imageBytes: mediaData,
-            fileName: '${DateTime.now().millisecondsSinceEpoch}_profile.png',
-            id: ref.read(userTokenProvifer)?['id'],
-            token: ref.read(userTokenProvifer)?['token'],
-          );
-
-      ref.read(uploadFileKey.notifier).state = imagefilekey;
-      ref.read(uploadFileProfile.notifier).state = mediaData;
-
-      log("✅ อัปโหลดสำเร็จ: $imagefilekey");
-    } else {
-      log("❌ ไม่ได้เลือกรูปภาพ");
-    }
-  } catch (e, stack) {
-    log("❌ เกิดข้อผิดพลาดระหว่างเลือกรูป: $e");
-    log("📛 Stack trace: $stack");
-  }
-}
+// Future<void> pickImageWeb(WidgetRef ref) async {
+//   log("✅ pickImageWeb ถูกเรียกแล้ว");
+//   final uploadrepository = ref.watch(uploadRemoteRepositoryProvider);
+//   final userToken = ref.watch(userTokenProvifer);
+//   try {
+//     final result = await FilePicker.platform.pickFiles(
+//       type: FileType.image,
+//       withData: true,
+//     );
+//     log("📂 result: ${result?.files.single.name}");
+//     if (result != null && result.files.single.bytes != null) {
+//       final Uint8List imageBytes = result.files.single.bytes!;
+//       final fileName = result.files.single.name;
+//       final safeFileName = '${DateTime.now().millisecondsSinceEpoch}_$fileName';
+//       final imagefilekey = await uploadrepository.uploadImageToSupabase(
+//           imageBytes: imageBytes,
+//           fileName: safeFileName,
+//           id: userToken?['id'],
+//           token: userToken?['token']);
+//       ref.read(uploadFileKey.notifier).state = imagefilekey;
+//       ref.read(uploadFile.notifier).state = result.files.single;
+//       log("✅ อัปโหลดสำเร็จ: $imagefilekey");
+//     } else {
+//       log("❌ ไม่ได้เลือกไฟล์ หรือเลือกไฟล์ไม่สำเร็จ");
+//     }
+//   } catch (e, stack) {
+//     log("❌ เกิดข้อผิดพลาดระหว่างเลือกไฟล์: $e");
+//     log("📛 Stack trace: $stack");
+//   }
+// }

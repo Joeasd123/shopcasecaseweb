@@ -29,8 +29,6 @@ class UserRepository {
         },
       );
 
-      debugPrint("RESPONSE: ${response.body}");
-
       if (response.statusCode == 200) {
         final List<dynamic> data = convert.jsonDecode(response.body);
 

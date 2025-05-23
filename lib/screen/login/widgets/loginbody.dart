@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/login/widgets/login_dialog.dart';
 import 'package:flutter_web/screen/login/widgets/register_dialog.dart';
@@ -43,12 +42,12 @@ class _LoginbodyState extends ConsumerState<Loginbody> {
                                 NetworkImage(user.first.imageprofile ?? ""),
                           ),
                         ),
-                        Gap(10.w),
+                        Gap(10),
                         Text(
                           '${user.first.firstname ?? ""} ${user.first.lastname ?? ""}',
                           style: const TextStyle(fontSize: 18),
                         ),
-                        Gap(10.w),
+                        Gap(10),
                       ],
                     );
                   },

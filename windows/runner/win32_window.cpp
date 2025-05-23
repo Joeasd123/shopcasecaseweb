@@ -1,9 +1,9 @@
-#include "win32_window.h"
+#include "win32_window"
 
-#include <dwmapi.h>
-#include <flutter_windows.h>
+#include <dwmapi>
+#include <flutter_windows>
 
-#include "resource.h"
+#include "resource"
 
 namespace {
 
@@ -89,15 +89,15 @@ WindowClassRegistrar* WindowClassRegistrar::instance_ = nullptr;
 const wchar_t* WindowClassRegistrar::GetWindowClass() {
   if (!class_registered_) {
     WNDCLASS window_class{};
-    window_class.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    window_classCursor = LoadCursor(nullptr, IDC_ARROW);
     window_class.lpszClassName = kWindowClassName;
     window_class.style = CS_HREDRAW | CS_VREDRAW;
     window_class.cbClsExtra = 0;
     window_class.cbWndExtra = 0;
-    window_class.hInstance = GetModuleHandle(nullptr);
-    window_class.hIcon =
-        LoadIcon(window_class.hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
-    window_class.hbrBackground = 0;
+    window_classInstance = GetModuleHandle(nullptr);
+    window_classIcon =
+        LoadIcon(window_classInstance, MAKEINTRESOURCE(IDI_APP_ICON));
+    window_classbrBackground = 0;
     window_class.lpszMenuName = nullptr;
     window_class.lpfnWndProc = Win32Window::WndProc;
     RegisterClass(&window_class);
@@ -137,7 +137,7 @@ bool Win32Window::Create(const std::wstring& title,
   HWND window = CreateWindow(
       window_class, title.c_str(), WS_OVERLAPPEDWINDOW,
       Scale(origin.x, scale_factor), Scale(origin.y, scale_factor),
-      Scale(size.width, scale_factor), Scale(size.height, scale_factor),
+      Scale(size.width, scale_factor), Scale(sizeeight, scale_factor),
       nullptr, nullptr, GetModuleHandle(nullptr), this);
 
   if (!window) {

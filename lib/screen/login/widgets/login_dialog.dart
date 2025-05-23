@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/login/service/login_repository.dart';
 import 'package:flutter_web/screen/user/controllers/user_controller.dart';
@@ -32,7 +31,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
 
     return Dialog(
       child: Padding(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(20),
         child: Form(
           key: formKey,
           child: Column(
@@ -42,13 +41,12 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
               Center(
                 child: Text(
                   "เข้าสู่ระบบ",
-                  style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              Gap(15.h),
+              Gap(15),
               Text("Username"),
-              Gap(5.h),
+              Gap(5),
               TextFormField(
                 focusNode: emailFocusNode,
                 controller: controllersLogin["email"],
@@ -59,9 +57,9 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   emailFocusNode.requestFocus();
                 },
               ),
-              Gap(10.h),
+              Gap(10),
               Text("Password"),
-              Gap(5.h),
+              Gap(5),
               TextFormField(
                 focusNode: passwordFocusNode,
                 controller: controllersLogin["password"],
@@ -73,7 +71,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   passwordFocusNode.requestFocus();
                 },
               ),
-              Gap(20.h),
+              Gap(20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -119,7 +117,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   ),
                 ),
               ),
-              Gap(5.h),
+              Gap(5),
               Center(
                 child: TextButton(
                   onPressed: () {

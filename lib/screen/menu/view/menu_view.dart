@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web/screen/menu/widget/menu_widget_mobile.dart';
 import 'package:flutter_web/screen/menu/widget/menu_widget_web.dart';
 
 class MenuView extends StatefulWidget {
@@ -15,17 +14,11 @@ class _MenuViewState extends State<MenuView> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return constraints.maxWidth < 600
-            ? MenuWidgetMobile(
-                onItemSelected: (index) {
-                  widget.onItemSelected!(index);
-                },
-              )
-            : MenuWidgetWeb(
-                onItemSelected: (index) {
-                  widget.onItemSelected!(index);
-                },
-              );
+        return MenuWidgetWeb(
+          onItemSelected: (index) {
+            widget.onItemSelected!(index);
+          },
+        );
       },
     );
   }
