@@ -32,6 +32,10 @@ class UserRepository {
       if (response.statusCode == 200) {
         final List<dynamic> data = convert.jsonDecode(response.body);
 
+        if (data.isEmpty) {
+          return [];
+        }
+
         final List<UserModel> searchDoc = data.map<UserModel>((e) {
           return UserModel.fromJson(e);
         }).toList();

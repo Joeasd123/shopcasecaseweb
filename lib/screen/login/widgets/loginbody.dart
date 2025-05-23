@@ -37,16 +37,31 @@ class _LoginbodyState extends ConsumerState<Loginbody> {
                                 context: context,
                                 builder: (context) => ProfileView());
                           },
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.first.imageprofile ?? ""),
-                          ),
+                          child: getUser.value != null &&
+                                  getUser.value!.isNotEmpty &&
+                                  getUser.value?.first.imageprofile != null
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      getUser.value?.first.imageprofile ?? ""),
+                                )
+                              : CircleAvatar(
+                                  child: Icon(
+                                    Icons.person,
+                                  ),
+                                ),
                         ),
                         Gap(10),
-                        Text(
-                          '${user.first.firstname ?? ""} ${user.first.lastname ?? ""}',
-                          style: const TextStyle(fontSize: 18),
-                        ),
+                        getUser.value != null &&
+                                getUser.value!.isNotEmpty &&
+                                getUser.value?.first.imageprofile != null
+                            ? Text(
+                                '${user.first.firstname ?? ""} ${user.first.lastname ?? ""}',
+                                style: const TextStyle(fontSize: 18),
+                              )
+                            : Text(
+                                'New User',
+                                style: const TextStyle(fontSize: 18),
+                              ),
                         Gap(10),
                       ],
                     );

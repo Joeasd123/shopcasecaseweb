@@ -27,17 +27,34 @@ class DrawerMobile extends ConsumerWidget {
                 if (token != null)
                   Column(
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(
-                            getUser.value?.first.imageprofile ?? ""),
-                      ),
+                      if (getUser.value != null &&
+                          getUser.value!.isNotEmpty &&
+                          getUser.value?.first.imageprofile != null)
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage(
+                              getUser.value?.first.imageprofile ?? ""),
+                        )
+                      else
+                        CircleAvatar(
+                          radius: 40,
+                          child: Icon(
+                            Icons.person,
+                            size: 50,
+                          ),
+                        ),
                       Gap(10),
-                      Text(
-                        '${getUser.value?.first.firstname ?? ""} ${getUser.value?.first.lastname ?? ""}',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white),
-                      ),
+                      getUser.value != null &&
+                              getUser.value!.isNotEmpty &&
+                              getUser.value?.first.imageprofile != null
+                          ? Text(
+                              '${getUser.value!.first.firstname ?? ""} ${getUser.value!.first.lastname ?? ""}',
+                              style: const TextStyle(fontSize: 18),
+                            )
+                          : Text(
+                              'New User',
+                              style: const TextStyle(fontSize: 18),
+                            ),
                     ],
                   )
                 else
