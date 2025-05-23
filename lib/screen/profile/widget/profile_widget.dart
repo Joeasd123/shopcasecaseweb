@@ -1,16 +1,17 @@
-import 'dart:io';
+import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/profile/controller/profile_controllers.dart';
 import 'package:flutter_web/screen/profile/repository/profile_repository.dart';
+import 'package:flutter_web/screen/uploadfile/repository/upload_repository.dart';
 import 'package:flutter_web/screen/user/controllers/user_controller.dart';
 import 'package:flutter_web/screen/user/repository/user_repository.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 
 class ProfileWidget extends StatefulHookConsumerWidget {
   const ProfileWidget({super.key});
@@ -50,12 +51,7 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> {
                       selectImageprofile != null
                           ? CircleAvatar(
                               radius: 70.h,
-                              backgroundImage: kIsWeb
-                                  ? MemoryImage(selectImageprofile.bytes!)
-                                  : FileImage(
-                                          File(selectImageprofile.path ?? ''))
-                                      as ImageProvider,
-                            )
+                              backgroundImage: MemoryImage(selectImageprofile))
                           : CircleAvatar(
                               radius: 70.h,
                               backgroundImage: NetworkImage(
@@ -66,10 +62,34 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> {
                         right: 0,
                         child: IconButton(
                           icon: Icon(Icons.camera_alt_outlined),
-                          onPressed: () {
-                            if (kIsWeb) {
-                              print("📸 กำลังเปิด File Picker บน Web...");
-                              pickImageWeb(ref);
+                          onPressed: () async {
+                            try {
+                              final mediaData =
+                                  await ImagePickerWeb.getImageAsBytes();
+                              if (mediaData != null) {
+                                final imagefilekey = await ref
+                                    .read(uploadRemoteRepositoryProvider)
+                                    .uploadImageToSupabase(
+                                      imageBytes: mediaData,
+                                      fileName:
+                                          '${DateTime.now().millisecondsSinceEpoch}_profile.png',
+                                      id: ref.read(userTokenProvifer)?['id'],
+                                      token:
+                                          ref.read(userTokenProvifer)?['token'],
+                                    );
+
+                                ref.read(uploadFileKey.notifier).state =
+                                    imagefilekey;
+                                ref.read(uploadFileProfile.notifier).state =
+                                    mediaData;
+
+                                log("✅ อัปโหลดสำเร็จ: $imagefilekey");
+                              } else {
+                                log("❌ ไม่ได้เลือกรูปภาพ");
+                              }
+                            } catch (e, stack) {
+                              log("❌ เกิดข้อผิดพลาดระหว่างเลือกรูป: $e");
+                              log("📛 Stack trace: $stack");
                             }
                           },
                         ),

@@ -1,6 +1,6 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,13 +8,14 @@ import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/uploadfile/repository/upload_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 
 Map<String, TextEditingController> controllersProfile = {
   "firstname": TextEditingController(),
   "lastname": TextEditingController(),
   "address": TextEditingController(),
 };
-final uploadFileProfile = StateProvider.autoDispose<PlatformFile?>((ref) {
+final uploadFileProfile = StateProvider.autoDispose<Uint8List?>((ref) {
   return null;
 });
 
@@ -57,28 +58,27 @@ Future<dynamic> openDialogImage(
 }
 
 Future<void> pickImageWeb(WidgetRef ref) async {
-  print("✅ pickImageWeb ถูกเรียกแล้ว");
-  final uploadrepository = ref.watch(uploadRemoteRepositoryProvider);
-  final userToken = ref.watch(userTokenProvifer);
-  final result = await FilePicker.platform.pickFiles(
-    type: FileType.image,
-    withData: true,
-  );
-  print("📂 result: ${result?.files.single.name}");
+  try {
+    final mediaData = await ImagePickerWeb.getImageAsBytes();
+    if (mediaData != null) {
+      final imagefilekey = await ref
+          .read(uploadRemoteRepositoryProvider)
+          .uploadImageToSupabase(
+            imageBytes: mediaData,
+            fileName: '${DateTime.now().millisecondsSinceEpoch}_profile.png',
+            id: ref.read(userTokenProvifer)?['id'],
+            token: ref.read(userTokenProvifer)?['token'],
+          );
 
-  if (result != null && result.files.single.bytes != null) {
-    final Uint8List imageBytes = result.files.single.bytes!;
-    final fileName = result.files.single.name;
-    final safeFileName = '${DateTime.now().millisecondsSinceEpoch}_$fileName';
-    final imagefilekey = await uploadrepository.uploadImageToSupabase(
-        imageBytes: imageBytes,
-        fileName: safeFileName,
-        id: userToken?['id'],
-        token: userToken?['token']);
-    ref.read(uploadFileKey.notifier).state = imagefilekey;
-    ref.read(uploadFileProfile.notifier).state = result.files.single;
-    print("✅ อัปโหลดสำเร็จ: $imagefilekey");
-  } else {
-    print("❌ ไม่ได้เลือกไฟล์ หรือเลือกไฟล์ไม่สำเร็จ");
+      ref.read(uploadFileKey.notifier).state = imagefilekey;
+      ref.read(uploadFileProfile.notifier).state = mediaData;
+
+      log("✅ อัปโหลดสำเร็จ: $imagefilekey");
+    } else {
+      log("❌ ไม่ได้เลือกรูปภาพ");
+    }
+  } catch (e, stack) {
+    log("❌ เกิดข้อผิดพลาดระหว่างเลือกรูป: $e");
+    log("📛 Stack trace: $stack");
   }
 }
