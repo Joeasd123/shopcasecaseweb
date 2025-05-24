@@ -29,7 +29,7 @@ class _HomeWidgetMobileState extends ConsumerState<HomeWidgetMobile> {
 
     final pages = [
       WidgetHomeMobile(),
-      Center(child: Text('บริการ')),
+      Center(child: Text('Test')),
       if (userToken?['token'] != null) ProfileView(),
     ];
 
