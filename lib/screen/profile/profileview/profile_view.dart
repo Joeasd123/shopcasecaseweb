@@ -18,9 +18,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     final isTablet = ResponsiveBreakpoints.of(context).isTablet;
     final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
-    if (isMobile || isTablet) {
+    if (isMobile) {
       return ProfilemobileWidget();
-    } else if (isDesktop) {
+    } else if (isDesktop || isTablet) {
       return ProfileWidgetweb();
     } else {
       return const Center(child: Text('ไม่รองรับแพลตฟอร์มนี้'));

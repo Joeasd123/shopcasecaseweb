@@ -15,34 +15,11 @@ class HomeWidgetMobile extends StatefulHookConsumerWidget {
 
 class _HomeWidgetMobileState extends ConsumerState<HomeWidgetMobile> {
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget homepage = WidgetHomeMobile();
   int selectpage = 0;
-  List<Widget> pages = [];
-  @override
-  void initState() {
-    super.initState();
-    final userToken = ref.read(userTokenProvifer);
-
-    if (userToken?['token'] != null) {
-      pages = [
-        WidgetHomeMobile(),
-        Center(child: Text('บริการ')),
-        ProfileView(),
-      ];
-    } else {
-      pages = [
-        WidgetHomeMobile(),
-        Center(child: Text('บริการ')),
-      ];
-    }
-
-    homepage = pages[0];
-  }
 
   void onItem(int index) {
     setState(() {
       selectpage = index;
-      homepage = pages[index];
     });
   }
 
@@ -56,6 +33,9 @@ class _HomeWidgetMobileState extends ConsumerState<HomeWidgetMobile> {
       if (userToken?['token'] != null) ProfileView(),
     ];
 
+    if (selectpage >= pages.length) {
+      selectpage = 0;
+    }
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();

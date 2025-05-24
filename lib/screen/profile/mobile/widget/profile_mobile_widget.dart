@@ -66,14 +66,23 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                         child: Stack(children: [
                           selectImageprofile != null
                               ? CircleAvatar(
-                                  radius: 70,
+                                  radius: 60,
                                   backgroundImage:
                                       MemoryImage(selectImageprofile))
-                              : CircleAvatar(
-                                  radius: 70,
-                                  backgroundImage: NetworkImage(
-                                      data.first.imageprofile.toString()),
-                                ),
+                              : data.isNotEmpty &&
+                                      data.first.imageprofile != null
+                                  ? CircleAvatar(
+                                      radius: 60,
+                                      backgroundImage: NetworkImage(
+                                          data.first.imageprofile.toString()),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 60,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 50,
+                                      ),
+                                    ),
                           Positioned(
                             bottom: 0,
                             right: 0,
