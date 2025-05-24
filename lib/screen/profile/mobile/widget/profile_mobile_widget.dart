@@ -161,7 +161,8 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (data.isNotEmpty) {
+                            if (getUser.value != null &&
+                                getUser.value!.isNotEmpty) {
                               if (isUploading) return;
                               setState(() {
                                 isUploading = true;
