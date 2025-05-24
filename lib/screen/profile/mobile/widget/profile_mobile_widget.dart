@@ -180,7 +180,6 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                               if (savedata != null) {
                                 if (!context.mounted) return;
                                 ref.invalidate(userRemoteRepositoryProvider);
-                                Navigator.pop(context);
                               }
                             } finally {
                               setState(() {
