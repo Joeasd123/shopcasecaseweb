@@ -26,7 +26,7 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
 
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
+  bool isUploading = false;
   @override
   void dispose() {
     emailFocusNode.dispose();
@@ -161,21 +161,31 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            final savedata = await profilerepository.updateUser(
-                                id: userToken?["id"],
-                                token: userToken?["token"],
-                                firstname:
-                                    controllersProfile["firstname"]?.text,
-                                lastname: controllersProfile["lastname"]?.text,
-                                address: controllersProfile["address"]?.text,
-                                imageprofile: imagefile != null
-                                    ? '${urlenv}storage/v1/object/$imagefile'
-                                    : data.first.imageprofile.toString());
-
-                            if (savedata != null) {
-                              if (!context.mounted) return;
-                              ref.invalidate(userRemoteRepositoryProvider);
-                              Navigator.pop(context);
+                            if (isUploading) return;
+                            setState(() {
+                              isUploading = true;
+                            });
+                            try {
+                              final savedata = await profilerepository.updateUser(
+                                  id: userToken?["id"],
+                                  token: userToken?["token"],
+                                  firstname:
+                                      controllersProfile["firstname"]?.text,
+                                  lastname:
+                                      controllersProfile["lastname"]?.text,
+                                  address: controllersProfile["address"]?.text,
+                                  imageprofile: imagefile != null
+                                      ? '${urlenv}storage/v1/object/$imagefile'
+                                      : data.first.imageprofile.toString());
+                              if (savedata != null) {
+                                if (!context.mounted) return;
+                                ref.invalidate(userRemoteRepositoryProvider);
+                                Navigator.pop(context);
+                              }
+                            } finally {
+                              setState(() {
+                                isUploading = false;
+                              });
                             }
                           },
                           style: ElevatedButton.styleFrom(
