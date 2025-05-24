@@ -18,6 +18,7 @@ class ProfileRepository {
     String? lastname,
     String? address,
     String? imageprofile,
+    required String? email,
     required String? token,
   }) async {
     if (apikey == null) {
@@ -36,6 +37,7 @@ class ProfileRepository {
       body: convert.jsonEncode({
         "id": id,
         'firstname': firstname,
+        'email': email,
         'lastname': lastname,
         'address': address,
         'imageprofile': imageprofile,

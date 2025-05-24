@@ -201,6 +201,7 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                                 final savedata = await profilerepository.createUser(
                                     id: userToken?["id"],
                                     token: userToken?["token"],
+                                    email: userToken?["email"],
                                     firstname:
                                         controllersProfile["firstname"]?.text,
                                     lastname:

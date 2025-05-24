@@ -20,16 +20,18 @@ Map<String, TextEditingController> controllersLogin = {
 class TokenNotifier extends StateNotifier<Map<String, dynamic>?> {
   TokenNotifier() : super(null);
 
-  Future<void> storeToken(String? token, String id) async {
+  Future<void> storeToken(String? token, String id, String email) async {
     if (token == null) return;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
     await prefs.setString('id', id);
+    await prefs.setString('email', email);
 
     state = {
       'token': token,
       'id': id,
+      'email': email,
     };
   }
 

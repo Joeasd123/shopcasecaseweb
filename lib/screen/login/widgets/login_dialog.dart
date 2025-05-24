@@ -92,6 +92,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                         await ref.read(userTokenProvifer.notifier).storeToken(
                               data["access_token"],
                               data["user"]["id"].toString(),
+                              data["user"]["email"].toString(),
                             );
 
                         ref.invalidate(getUserProvider);
