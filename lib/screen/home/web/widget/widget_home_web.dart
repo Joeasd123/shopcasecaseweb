@@ -27,7 +27,7 @@ class _WidgetHomeWebState extends ConsumerState<WidgetHomeWeb> {
             height: 600,
             autoPlay: true,
             aspectRatio: 16 / 9,
-            viewportFraction: 0.6,
+            viewportFraction: 1,
             enlargeCenterPage: false,
             enableInfiniteScroll: true,
             onPageChanged: (index, reason) {

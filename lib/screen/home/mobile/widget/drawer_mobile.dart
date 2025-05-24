@@ -73,6 +73,7 @@ class DrawerMobile extends ConsumerWidget {
                             Navigator.pop(context);
 
                             Future.delayed(Duration(milliseconds: 200), () {
+                              if (!context.mounted) return;
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -108,7 +109,6 @@ class DrawerMobile extends ConsumerWidget {
             leading: Icon(Icons.home),
             title: Text('หน้าหลัก'),
             onTap: () {
-              // ทำสิ่งที่ต้องการเมื่อเลือกเมนูนี้ เช่น นำทางไปยังหน้าอื่น
               Navigator.pop(context); // ปิด drawer
             },
           ),

@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web/screen/home/controllers/home_controller.dart';
-import 'package:flutter_web/screen/home/mobile/drawer_mobile.dart';
+import 'package:flutter_web/screen/home/mobile/widget/drawer_mobile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WidgetHomeMobile extends StatefulHookConsumerWidget {
@@ -71,7 +71,7 @@ class _WidgetHomeMobileState extends ConsumerState<WidgetHomeMobile> {
             },
           );
         },
-        loading: () => const CircularProgressIndicator(),
+        loading: () => Center(child: const CircularProgressIndicator()),
         error: (err, stack) => const Text("โหลดข้อมูลล้มเหลว"),
       ),
     );

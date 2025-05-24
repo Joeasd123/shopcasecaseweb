@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web/screen/menu/widget/menu_widget_web.dart';
+import 'package:flutter_web/screen/home/web/widget/menu_widget_web.dart';
 
 class MenuView extends StatefulWidget {
   const MenuView({super.key, this.onItemSelected});

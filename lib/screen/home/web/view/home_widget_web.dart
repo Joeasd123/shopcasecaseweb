@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web/screen/menu/view/menu_view.dart';
+import 'package:flutter_web/screen/home/web/view/menu_view.dart';
+import 'package:flutter_web/screen/home/web/widget/widget_home_web.dart';
 
 class HomeWidgetWeb extends StatefulWidget {
   const HomeWidgetWeb({super.key});
@@ -78,7 +79,7 @@ class _HomeWidgetWebState extends State<HomeWidgetWeb> {
                 });
               },
             ),
-            // index == 0 ? WidgetHomeWeb() : SizedBox(),
+            index == 0 ? WidgetHomeWeb() : SizedBox(),
           ],
         ),
       ),
