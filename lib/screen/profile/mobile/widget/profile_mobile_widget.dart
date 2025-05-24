@@ -161,30 +161,68 @@ class _ProfileWidgetmobileState extends ConsumerState<ProfilemobileWidget> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (isUploading) return;
-                            setState(() {
-                              isUploading = true;
-                            });
-                            try {
-                              final savedata = await profilerepository.updateUser(
-                                  id: userToken?["id"],
-                                  token: userToken?["token"],
-                                  firstname:
-                                      controllersProfile["firstname"]?.text,
-                                  lastname:
-                                      controllersProfile["lastname"]?.text,
-                                  address: controllersProfile["address"]?.text,
-                                  imageprofile: imagefile != null
-                                      ? '${urlenv}storage/v1/object/$imagefile'
-                                      : data.first.imageprofile.toString());
-                              if (savedata != null) {
-                                if (!context.mounted) return;
-                                ref.invalidate(userRemoteRepositoryProvider);
-                              }
-                            } finally {
+                            if (data.isNotEmpty) {
+                              if (isUploading) return;
                               setState(() {
-                                isUploading = false;
+                                isUploading = true;
                               });
+                              try {
+                                final savedata = await profilerepository.updateUser(
+                                    id: userToken?["id"],
+                                    token: userToken?["token"],
+                                    firstname:
+                                        controllersProfile["firstname"]?.text,
+                                    lastname:
+                                        controllersProfile["lastname"]?.text,
+                                    address:
+                                        controllersProfile["address"]?.text,
+                                    imageprofile: imagefile != null
+                                        ? '${urlenv}storage/v1/object/$imagefile'
+                                        : data.first.imageprofile.toString());
+                                if (savedata != null) {
+                                  if (!context.mounted) return;
+                                  ref.invalidate(userRemoteRepositoryProvider);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("บันทึกข้อมูลสำเร็จ")),
+                                  );
+                                }
+                              } finally {
+                                setState(() {
+                                  isUploading = false;
+                                });
+                              }
+                            } else {
+                              if (isUploading) return;
+                              setState(() {
+                                isUploading = true;
+                              });
+                              try {
+                                final savedata = await profilerepository.createUser(
+                                    id: userToken?["id"],
+                                    token: userToken?["token"],
+                                    firstname:
+                                        controllersProfile["firstname"]?.text,
+                                    lastname:
+                                        controllersProfile["lastname"]?.text,
+                                    address:
+                                        controllersProfile["address"]?.text,
+                                    imageprofile: imagefile != null
+                                        ? '${urlenv}storage/v1/object/$imagefile'
+                                        : data.first.imageprofile.toString());
+                                if (savedata != null) {
+                                  if (!context.mounted) return;
+                                  ref.invalidate(userRemoteRepositoryProvider);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("บันทึกข้อมูลสำเร็จ")),
+                                  );
+                                }
+                              } finally {
+                                setState(() {
+                                  isUploading = false;
+                                });
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
