@@ -52,6 +52,7 @@ dependencies:
   mime: ^2.0.0
   image_picker_web: ^3.0.0
   responsive_framework: ^1.5.1
+  intl: ^0.18.1
  
 dev_dependencies:
   flutter_test:

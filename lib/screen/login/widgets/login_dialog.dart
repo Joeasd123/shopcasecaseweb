@@ -4,6 +4,8 @@ import 'package:flutter_web/screen/login/service/login_repository.dart';
 import 'package:flutter_web/screen/user/controllers/user_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show Supabase, signInWithOAuth, AuthResponse, AuthException;
 
 class LoginDialog extends StatefulHookConsumerWidget {
   const LoginDialog({super.key, this.onClose});
@@ -72,6 +74,8 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                 },
               ),
               Gap(20),
+              // ... (โค้ดส่วนบนของคุณ) ...
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -81,30 +85,45 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                       final password = controllersLogin["password"]?.text ?? '';
                       print(
                           "พยายามเข้าสู่ระบบด้วย email: $email, password: $password");
-
                       try {
-                        final data = await authRepository.login(
+                        final AuthResponse response = await Supabase
+                            .instance.client.auth
+                            .signInWithPassword(
                           email: email,
                           password: password,
                         );
-                        print("ผลลัพธ์จาก API: $data");
-
-                        await ref.read(userTokenProvifer.notifier).storeToken(
-                              data["access_token"],
-                              data["user"]["id"].toString(),
-                              data["user"]["email"].toString(),
-                            );
-
-                        ref.invalidate(getUserProvider);
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                      } catch (e) {
-                        String errorMessage = "เข้าสู่ระบบล้มเหลว";
-                        if (e is Exception) {
-                          errorMessage =
-                              e.toString().replaceFirst('Exception: ', '');
+                        print("Login Response from SDK: ${response.user?.id}");
+                        if (response.user != null && response.session != null) {
+                          await ref.read(userTokenProvifer.notifier).storeToken(
+                                response.session!.accessToken,
+                                response.user!.id,
+                                response.user!.email ?? '',
+                              );
+                          ref.invalidate(getUserProvider);
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                        } else {
+                          throw Exception(
+                              'Login failed: No user or session in response from SDK.');
                         }
-
+                      } on AuthException catch (e) {
+                        String errorMessage = e.message;
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("เกิดข้อผิดพลาดในการเข้าสู่ระบบ"),
+                            content: Text(errorMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("ตกลง"),
+                              ),
+                            ],
+                          ),
+                        );
+                      } catch (e) {
+                        String errorMessage =
+                            "เกิดข้อผิดพลาดที่ไม่คาดคิด: ${e.toString()}";
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -124,7 +143,7 @@ class _LoginDialogState extends ConsumerState<LoginDialog> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
-                  child: Text(
+                  child: const Text(
                     "ตกลง",
                     style: TextStyle(color: Colors.white),
                   ),

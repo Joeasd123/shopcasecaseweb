@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_web/screen/chat/widget/chatpage.dart';
 import 'package:flutter_web/screen/home/mobile/widget/widget_home_mobile.dart';
 import 'package:flutter_web/screen/login/controller/login_controller.dart';
 import 'package:flutter_web/screen/profile/profileview/profile_view.dart';
@@ -30,6 +31,7 @@ class _HomeWidgetMobileState extends ConsumerState<HomeWidgetMobile> {
     final pages = [
       WidgetHomeMobile(),
       Center(child: Text('Test')),
+      if (userToken?['token'] != null) ChatPage(),
       if (userToken?['token'] != null) ProfileView(),
     ];
 
@@ -63,6 +65,8 @@ class _HomeWidgetMobileState extends ConsumerState<HomeWidgetMobile> {
                     icon: Icon(Icons.home), label: 'หน้าแรก'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.miscellaneous_services), label: 'บริการ'),
+                if (userToken?['token'] != null)
+                  BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'แชท'),
                 if (userToken?['token'] != null)
                   BottomNavigationBarItem(
                       icon: Icon(Icons.account_box_outlined), label: 'โปรไฟล์'),

@@ -21,53 +21,63 @@ class _WidgetHomeWebState extends ConsumerState<WidgetHomeWeb> {
 
     return bannersdata.when(
       data: (data) {
-        return CarouselSlider.builder(
-          carouselController: carouselController,
-          options: CarouselOptions(
-            height: 600,
-            autoPlay: true,
-            aspectRatio: 16 / 9,
-            viewportFraction: 1,
-            enlargeCenterPage: false,
-            enableInfiniteScroll: true,
-            onPageChanged: (index, reason) {
-              setState(() {
-                current = index;
-              });
-            },
-          ),
-          itemCount: data.first.bannersurl?.length,
-          itemBuilder: (BuildContext context, int index, int realIndex) {
-            return GestureDetector(
-              onTap: () {},
-              child: Image.network(
-                data.first.bannersurl![index],
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  } else {
-                    return Center(
-                      child: CupertinoActivityIndicator(),
+        return Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(50),
+              child: SizedBox(
+                height: 350,
+                child: CarouselSlider.builder(
+                  carouselController: carouselController,
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 1,
+                    enlargeCenterPage: false,
+                    enableInfiniteScroll: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        current = index;
+                      });
+                    },
+                  ),
+                  itemCount: data.first.bannersurl?.length,
+                  itemBuilder:
+                      (BuildContext context, int index, int realIndex) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Image.network(
+                        data.first.bannersurl![index],
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CupertinoActivityIndicator(),
+                            );
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return Center(
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          );
+                        },
+                      ),
                     );
-                  }
-                },
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return Center(
-                    child: Icon(
-                      Icons.error,
-                      color: Colors.red,
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
-            );
-          },
+            ),
+          ],
         );
       },
-      loading: () => const CircularProgressIndicator(),
+      loading: () => Center(child: const CircularProgressIndicator()),
       error: (err, stack) => const Text("โหลดข้อมูลล้มเหลว"),
     );
   }
